@@ -34,7 +34,7 @@ const Google = {
     return new Promise((resolve, reject) => {
       GoogleSignIn.signInPromise()
         .then((user) => {
-          resolve(user.accessToken);
+          resolve(user);
         })
         .catch((err) => {
           reject(err);
