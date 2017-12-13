@@ -103,7 +103,7 @@ const FireAuth = class {
 
   googleLogin = () => {
     Auth.Google.login()
-      .then((user) => (
+      .then((user) => {
         if (user.email) {
           firebase.auth().fetchProvidersForEmail(user.email).then((providers) => {
             if (providers.length > 0 && providers[0] === 'facebook.com') {
@@ -117,7 +117,7 @@ const FireAuth = class {
           firebase.auth()
             .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
         }
-      ))
+      })
       .catch((err) => this.onError && this.onError(err));
   }
 
