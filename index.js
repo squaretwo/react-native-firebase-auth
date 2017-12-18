@@ -124,11 +124,6 @@ const FireAuth = class {
   logout = () => {
     this.user = null;
     this.profile = null;
-    this.onUserChange = null;
-    this.onLogout = null;
-    this.onEmailVerified = null;
-    this.onLogin = null;
-    this.onError = null;
     firebase.auth().signOut();
   }
 
