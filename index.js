@@ -101,24 +101,24 @@ const FireAuth = class {
       .catch((err) => this.onError && this.onError(err));
   }
 
-  googleLogin = () => {
+  googleLogin = (providerCallbackPromise) => {
     Auth.Google.login()
       .then((user) => {
         if (user.email) {
-          firebase.auth().fetchProvidersForEmail(user.email).then((providers) => {
-            if (providers.length > 0 && providers[0] === 'facebook.com') {
-              this.onError && this.onError({message:'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.'});
-            } else {
-              firebase.auth()
-                .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
-            }
-          });
-        } else {
-          firebase.auth()
-            .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
-        }
-      })
-      .catch((err) => this.onError && this.onError(err));
+        providerCallbackPromise(user.email).then((provider) => {
+          if (provider === 'facebook') {
+            this.onError && this.onError({message:'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.'});
+          } else {
+            firebase.auth()
+              .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
+          }
+        });
+      } else {
+        firebase.auth()
+          .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
+      }
+    })
+    .catch((err) => this.onError && this.onError(err));
   }
 
   logout = () => {
