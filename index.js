@@ -3,6 +3,7 @@ import Auth from './auth';
 
 const FireAuth = class {
   user = null;
+  googleAccessToken = undefined;
   profile = null;
   onUserChange = null;
   onLogout = null;
@@ -109,6 +110,7 @@ const FireAuth = class {
             if (providers.length > 0 && providers[0] === 'facebook.com') {
             this.onError && this.onError({message:'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.'});
           } else {
+            this.googleAccessToken = user.accessToken
             firebase.auth()
               .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
           }
@@ -129,6 +131,7 @@ const FireAuth = class {
           if (provider === 'facebook') {
             this.onError && this.onError({message:'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.'});
           } else {
+            this.googleAccessToken = user.accessToken
             firebase.auth()
               .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(null, user.accessToken))
           }
